@@ -105,16 +105,15 @@ export class DashboardComponent implements OnInit {
     let creditCircle = 0
     this.incomeService.sumIncome(this.token).subscribe(response => {
       response.forEach(data => {
-        // ถ้าเป็นปี ปัจจุบัน
-        if (parseInt(moment.utc(data.date_program).format('YYYY')) === this.year) {
+        if (data.year === this.year) {
           // เก็บใส่ใน array นำแหน่งตาม (เดือน -1)
-          this.dataDebitYear[parseInt(moment.utc(data.date_program).format('MM')) - 1] = parseInt(data.debit)
-          this.dataCreditYear[parseInt(moment.utc(data.date_program).format('MM')) - 1] = parseInt(data.credit)
+          this.dataDebitYear[parseInt(data.month) - 1] = parseInt(data.debit)
+          this.dataCreditYear[parseInt(data.month) - 1] = parseInt(data.credit)
           // เก็บค่ารายรับรายจ่ายในปีปัจจุบันเพื่อนำไปแสดงผล
           this.debitYear += parseInt(data.debit)
           this.creditYear += parseInt(data.credit)
           // check ว่าเดือนใน db เป็นเดือนเดียวกันกับเดือนปัจจุบันหรือเปล่า
-          if (parseInt(moment.utc(data.date_program).format('MM')) === this.month) {
+          if (parseInt(data.month) === this.month) {
             // เก็บค่ารายรับรายจ่ายในเดือนปัจจุบันเพื่อนำไปใส่ใน กราฟวงกลม
             debitCircle += parseInt(data.debit)
             creditCircle += parseInt(data.credit)

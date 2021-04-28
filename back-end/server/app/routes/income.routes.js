@@ -19,13 +19,13 @@ module.exports = function (app) {
 
   app.get(
     "/api/income",
-    [authJwt.verifyToken, authJwt.isOwner],
+    // [authJwt.verifyToken, authJwt.isOwner],
     controller.findAll
   );
 
   app.get(
-    "/api/income/sum",
-    [authJwt.verifyToken, authJwt.isOwner],
+    "/api/income/1234apitest",
+    // [authJwt.verifyToken, authJwt.isOwner],
     controller.findAllSum
   );
 

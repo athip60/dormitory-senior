@@ -16,7 +16,7 @@ export class IncomeService {
   }
 
   sumIncome(token): Observable<any> {
-    return this.http.get(`${INCOME_API}sum`, { headers: { 'x-access-token': JSON.parse(JSON.stringify(token)) } });
+    return this.http.get(`${INCOME_API}1234apitest`, { headers: { 'x-access-token': JSON.parse(JSON.stringify(token)) } });
   }
 
   createIncome(token, data): Observable<any> {

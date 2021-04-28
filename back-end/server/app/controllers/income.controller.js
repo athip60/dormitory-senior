@@ -1,6 +1,14 @@
 const { sequelize, Sequelize } = require("../models");
 const db = require("../models");
 const Income = db.income;
+const mysql = require("mysql2");
+const db1 = mysql.createConnection({
+  host: "localhost",
+  user: "adminAhom",
+  password: "wtMh8863",
+  database: "schlaf",
+});
+
 exports.create = (req, res) => {
   Income.create(req.body)
     .then((createIncome) => {
@@ -22,24 +30,34 @@ exports.findAll = (req, res) => {
 };
 
 exports.findAllSum = (req, res) => {
-  Income.findAll({
-    attributes: [
-      "debit",
-      [Sequelize.fn("SUM", Sequelize.col("debit")), "debit"],
-      "credit",
-      [Sequelize.fn("SUM", Sequelize.col("credit")), "credit"],
-      "balance",
-      "date_program",
-    ],
-    group: ["date_program"],
-    order: [["date_program", "ASC"]],
-  })
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+  db1.query(
+    "select year(date_program) as year, month(date_program) as month, sum(debit) as debit, sum(credit) as credit from incomes group by year(date_program), month(date_program)",
+    (error, results) => {
+      if (error) {
+        res.send({ message: error });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+  // Income.findAll({
+  //   attributes: [
+  //     "debit",
+  //     [Sequelize.fn("SUM", Sequelize.col("debit")), "debit"],
+  //     "credit",
+  //     [Sequelize.fn("SUM", Sequelize.col("credit")), "credit"],
+  //     "balance",
+  //     "date_program",
+  //   ],
+  //   group: ["date_program"],
+  //   order: [["date_program", "ASC"]],
+  // })
+  //   .then((data) => {
+  //     res.json(data);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).send({ message: err.message });
+  //   });
 };
 
 exports.update = (req, res) => {
